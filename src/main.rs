@@ -26,7 +26,7 @@ fn main()->core::result::Result<(),()> {
     && {
       let _y =  y . as_bytes()
     ; let l  = _y . len()
-    ; _y[l-4..l] == b".png"[..]
+    ; _y[l - 4 .. l] == b".png"[..]
     }
   })
 . collect::<alloc::vec::Vec<_>>()
@@ -78,10 +78,7 @@ fn main()->core::result::Result<(),()> {
         ; acc
         })
       . fold([0_i16; 4], |mut acc, item| {for i in 0 .. 4 { acc[i] += item[i] }; acc })
-      ; for i in 0 .. 4 { 
-          if nabs_sum[i] < -25 * ((SIDE * SIDE) as i16) { break 'a false 
-          }
-        }
+      ; for i in 0 .. 4 {  if nabs_sum[i] < -25 * ((SIDE * SIDE) as i16) { break 'a false } }
       }}
     ; true
     }
