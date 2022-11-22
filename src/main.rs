@@ -140,16 +140,16 @@ fn main()->core::result::Result<(),()> {
       ( b"\r[   \x1B[32mProgress\x1B[0m   ] : |\x1B[38;5;240m"
       ) 
       . then(m_e)?
-    ; for _ in 0 .. progress - 1    {stdout . write(b"=")              . then(m_e)? ;}
+    ; for _ in 0 .. progress - 1    {stdout . write(b"=") . then(m_e)? ;}
     ; if progress <= 10           
-      {                              stdout . write(b">")              . then(m_e)? 
-      ; for _ in 0 .. 10 - progress {stdout . write(b" ")              . then(m_e)? ;}
+      {                              stdout . write(b">") . then(m_e)? 
+      ; for _ in 0 .. 10 - progress {stdout . write(b" ") . then(m_e)? ;}
       } 
-    ;                                stdout . write(b"\x1B[0m|")              . then(m_e)?
+    ; stdout . write(b"\x1B[0m|") . then(m_e)?
     ;
     }
-  ; stdout . write(std::format!("{images_left:#10}\x1B[10D") . as_bytes())  . then(m_e)?
-  ; stdout . flush()      . then(m_e)?
+  ; stdout . write(std::format!("{images_left:#10}\x1B[10D") . as_bytes()) . then(m_e)?
+  ; stdout . flush() . then(m_e)?
   }
 
 ; core::mem::drop(stdout)
