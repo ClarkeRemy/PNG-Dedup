@@ -18,14 +18,15 @@ fn main()->core::result::Result<(),()> {
 // language settings?
 ; let input          = "./in"
 ; let output         = "./out"
-; let file_header    = "st_"
+// ; let file_header    = "st_"
+; let file_header    = "ezgif-frame-"
 ; let file_extension = "png" // note the file extention is defined as what comes __after__ the '.'
 ; let threshold      = 25
 
 
 ; let [input_path, output_path] = [input, output].map(std::fs::canonicalize).map(Result::unwrap) 
 ; std::println!
-  ( "\n \
+  ( "\
      \n\x1B[0m[\
        \x1B[32mConfiguration \
        \x1B[0m]\
@@ -86,7 +87,7 @@ fn main()->core::result::Result<(),()> {
 
 ; let Option::Some((cur_name, mut cur_img)) = images . next() else {return Result::Err(());}
 ; copy(cur_name)?
-; images_left-=1
+; images_left -= 1
 
 
 ; let mut progress = 0
@@ -103,8 +104,8 @@ fn main()->core::result::Result<(),()> {
     ; const /*TILE*/SIDE : u32 = 8
     // ignoring incomplete tiles
     ; for i in 0 .. width/SIDE { for j in 0 .. height/SIDE
-        { let i1 = cur_img  . view(i*SIDE, j*SIDE, SIDE, SIDE)
-        ; let i2 = next_img . view(i*SIDE, j*SIDE, SIDE, SIDE)
+        { let i1 = cur_img  . view(i * SIDE, j * SIDE, SIDE, SIDE)
+        ; let i2 = next_img . view(i * SIDE, j * SIDE, SIDE, SIDE)
         ; let nabs_sum = i1 . pixels() . zip(i2 . pixels())
           . map(|((_, _, p1), (_, _, p2))|
             { use core::num::Wrapping as W
@@ -141,7 +142,7 @@ fn main()->core::result::Result<(),()> {
       ) 
       . then(m_e)?
     ; for _ in 0 .. progress - 1    {stdout . write(b"=") . then(m_e)? ;}
-    ; if progress <= 10           
+    ; if progress <= 10
       {                              stdout . write(b">") . then(m_e)? 
       ; for _ in 0 .. 10 - progress {stdout . write(b" ") . then(m_e)? ;}
       } 
