@@ -15,6 +15,27 @@ fn main()->core::result::Result<(),()> {
   , core::{iter::Iterator, result::Result, option::Option }
   }
 
+
+// exe --in path --out path --threshold 25 --head string --extension png
+// exe -i path -o path -t 25 -h string -e png
+; let mut args = std::env::args();
+; let executable = args . next()
+// ; std::println!("{args:#?}\n{}", std::env::args() . count())
+; let mut _args: [Option<alloc::string::String>; 5] = core::array::from_fn(|_|None)
+
+; let last_key = 6;
+; for mut item in args 
+  { match item . as_str() 
+    { "--in"        | "-i" => ()
+    , "--out"       | "-o" => ()
+    , "--threshold" | "-t" => ()
+    , "--head"      | "-h" => ()
+    , "--extension" | "-e" => ()
+    , _                    => ()
+    }
+  }
+
+
 // language settings?
 ; let input          = "./in"
 ; let output         = "./out"
@@ -23,8 +44,10 @@ fn main()->core::result::Result<(),()> {
 ; let file_extension = "png" // note the file extention is defined as what comes __after__ the '.'
 ; let threshold      = 25
 
+; std::process::exit(0)
 
-; let [input_path, output_path] = [input, output].map(std::fs::canonicalize).map(Result::unwrap) 
+
+; let [input_path, output_path] = [input, output] . map(std::fs::canonicalize) . map(Result::unwrap) 
 ; std::println!
   ( "\
      \n\x1B[0m[\
@@ -38,15 +61,10 @@ fn main()->core::result::Result<(),()> {
     "
   , file_header
   , file_extension
-  , input_path.display() 
-  , output_path.display()
+  , input_path  . display() 
+  , output_path . display()
   , threshold
   )
-
-// ; let args : alloc::vec::Vec<String> = std::env::args() . collect();
-// ; std::println!("{args:#?}\n{}", std::env::args().count())
-
-// ; std::process::exit(0)
 
 ; let mut img_files = std::fs::read_dir(input) . then(m_e)?
   . filter_map(|e| e . ok())
@@ -63,7 +81,7 @@ fn main()->core::result::Result<(),()> {
   . collect::<alloc::vec::Vec<_>>()
 ; img_files . sort_by_key(std::fs::DirEntry::file_name)
 
-; let mut images_left = img_files.len()
+; let mut images_left = img_files . len()
 ; let images_total = images_left
 
 ; let mut images = img_files
@@ -71,8 +89,8 @@ fn main()->core::result::Result<(),()> {
   . map(|e|
   { use core::clone::Clone
   ; let name = e . file_name()
-  ; let mut path = input_path.clone()
-  ; path.push(&name)
+  ; let mut path = input_path . clone()
+  ; path . push(&name)
   ; (name, path . then(image::open) . unwrap())
   })
 
@@ -100,17 +118,16 @@ fn main()->core::result::Result<(),()> {
   { 
   // tile checking
     let skip = 'a:
-    { let (width, height) = cur_img.dimensions()
+    { let (width, height) = cur_img . dimensions()
     ; const /*TILE*/SIDE : u32 = 8
     // ignoring incomplete tiles
     ; for i in 0 .. width/SIDE { for j in 0 .. height/SIDE
-        { let i1 = cur_img  . view(i * SIDE, j * SIDE, SIDE, SIDE)
-        ; let i2 = next_img . view(i * SIDE, j * SIDE, SIDE, SIDE)
+        { let [i1, i2] = [&cur_img, &next_img] . map(|x| x . view(i * SIDE, j * SIDE, SIDE, SIDE))
         ; let nabs_sum = i1 . pixels() . zip(i2 . pixels())
           . map(|((_, _, p1), (_, _, p2))|
             { use core::num::Wrapping as W
             ; let cast = |x| W(x as i16)
-            ; let [p1, p2] = [p1.0, p2.0].map(|p|p . map(cast))
+            ; let [p1, p2] = [p1.0, p2.0] . map(|p|p . map(cast))
 
             // nabs function "Hackers Delight 2-4"
             ; const SHIFT : usize                = (i16::BITS-1) as usize
