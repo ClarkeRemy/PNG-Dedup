@@ -6,6 +6,8 @@ extern crate std;
 extern crate image;
 
 fn main()->core::result::Result<(),()> {
+  #![allow(unreachable_code, unused_variables)]
+
   fn m_e<T, E : std::fmt::Debug>(r: Result<T,E>) -> Result<T,()> 
   { if let Result::Err(e) = &r {std::println!("{e:?}",)}
   ; r . map_err(|_|())
@@ -16,35 +18,52 @@ fn main()->core::result::Result<(),()> {
   }
 
 
-// exe --in path --out path --threshold 25 --head string --extension png
-// exe -i path -o path -t 25 -h string -e png
-; let mut args = std::env::args();
+// // exe --in path --out path --threshold 25 --head string --extension png
+// // exe -i path -o path -t 25 -h string -e png
+; let mut args = std::env::args()
 ; let executable = args . next()
+; std::println!("{executable:?}")
 // ; std::println!("{args:#?}\n{}", std::env::args() . count())
-; let mut _args: [Option<alloc::string::String>; 5] = core::array::from_fn(|_|None)
 
-; let last_key = 6;
+; const OPTIONS: usize = 6
+; let last_key = OPTIONS
+; let mut _args: [Option<alloc::string::String>; 5] = core::array::from_fn(|_|Option::None)
 ; for mut item in args 
-  { match item . as_str() 
-    { "--in"        | "-i" => ()
-    , "--out"       | "-o" => ()
-    , "--threshold" | "-t" => ()
-    , "--head"      | "-h" => ()
-    , "--extension" | "-e" => ()
-    , _                    => ()
+  { if last_key==OPTIONS 
+    { match item . as_str() 
+      { "--in"        | "-i" => ()
+      , "--out"       | "-o" => ()
+      , "--threshold" | "-t" => ()
+      , "--head"      | "-h" => ()
+      , "--extension" | "-e" => ()
+      , _                    => return {std::println!("ERROR :: unexpected argument \"{item:?}\" "); Err(())}
+      }
+    }
+    else
+    { 
+      // match last_key
+      // { 
+      // }
     }
   }
 
 
 // language settings?
-; let input          = "./in"
+; let input          = 
+// "./.footage/3"
+// "./.footage/64"
+"./.footage/Compositing_test_2/Compositing test 2 (no cam)/(3) compositing test 2 - col Ch "
+// "./.footage/Compositing_test_2/Compositing test 2 (no cam)/(4) compositing test 2 - line Ch"
+// "./in"
 ; let output         = "./out"
-// ; let file_header    = "st_"
-; let file_header    = "ezgif-frame-"
+; let file_header    = 
+""
+// "ezgif-frame-"
+// "st_"
 ; let file_extension = "png" // note the file extention is defined as what comes __after__ the '.'
 ; let threshold      = 25
 
-; std::process::exit(0)
+;  std::process::exit(0)
 
 
 ; let [input_path, output_path] = [input, output] . map(std::fs::canonicalize) . map(Result::unwrap) 
@@ -53,10 +72,10 @@ fn main()->core::result::Result<(),()> {
      \n\x1B[0m[\
        \x1B[32mConfiguration \
        \x1B[0m]\
-     \n\x1B[38;5;107m   file_header \x1B[0m: {}\
-     \n\x1B[38;5;107m     extension \x1B[0m: {}\
-     \n\x1B[38;5;107m    input_path \x1B[0m: {}\
-     \n\x1B[38;5;107m   output_path \x1B[0m: {}\
+     \n\x1B[38;5;107m   file_header \x1B[0m: \"{}\"\
+     \n\x1B[38;5;107m     extension \x1B[0m: \"{}\"\
+     \n\x1B[38;5;107m    input_path \x1B[0m: \"{}\"\
+     \n\x1B[38;5;107m   output_path \x1B[0m: \"{}\"\
      \n\x1B[38;5;107m     threshold \x1B[0m: {}\
     "
   , file_header
